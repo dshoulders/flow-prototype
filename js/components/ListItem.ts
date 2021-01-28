@@ -3,7 +3,7 @@ import { html } from '../utils/markup.js';
 import { listItemStore } from '../state/listItems.js';
 import { ListItem } from '../state/listItems.ts';
 
-function ListItem ({ name, id, }) {
+function ListItem ({ name, id }: ListItem) {
 
     const { dispatch } = useContext(listItemStore);
 
