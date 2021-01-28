@@ -1,0 +1,34 @@
+{
+  "name": "flow-prototype",
+  "version": "1.0.0",
+  "description": "",
+  "watch": {
+    "compile": "src/**/*.{ts,js}"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js",
+    "serve": "http-server out",
+    "watch": "nodemon --watch src -e js,ts,html,css --exec npm run build",
+    "start": "./start.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dshoulders/flow-prototype.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dshoulders/flow-prototype/issues"
+  },
+  "homepage": "https://github.com/dshoulders/flow-prototype#readme",
+  "dependencies": {
+    "copyfiles": "^2.4.1",
+    "esbuild": "^0.8.36",
+    "filelist": "^1.0.1",
+    "http-server": "^0.12.3",
+    "nodemon": "^2.0.7",
+    "npm-watch": "^0.7.0",
+    "rimraf": "^3.0.2"
+  }
+}

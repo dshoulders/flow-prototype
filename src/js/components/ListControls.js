@@ -16,7 +16,7 @@ const ListControls = () => {
         <div className="lists">
             <${List}/>
         </div>
-        <button onClick=${() => dispatch({ type: 'ADD_ITEM', name: 'Jenny' })}>Add</button>
+        <button onClick=${() => dispatch({ type: 'ADD_ITEM', payload: { name: 'Jenny' }})}>Add</button>
         <button onClick=${() => dispatch({ type: 'REVERSE_ITEMS' })}>Reverse</button>
         <button onClick=${() => dispatch({ type: 'RENAME_ITEMS' })}>Rename</button>
     </div>`
