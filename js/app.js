@@ -1,4 +1,4 @@
-import { render } from 'https://cdn.skypack.dev/react-dom';
+import * as ReactDOM from './lib/react-dom/react-dom-internal.js';
 import { html } from './utils/markup.js';
 import { ListItemProvider } from './state/listItems.js';
 import ListControls from './components/ListControls.js';
@@ -12,4 +12,4 @@ function App () {
     `;
 }
 
-render(html`<${App}/>`, document.getElementById('app'));
+ReactDOM.render(html`<${App}/>`, document.getElementById('app'));

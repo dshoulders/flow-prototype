@@ -1,10 +1,10 @@
-import { useContext } from 'https://cdn.skypack.dev/react';
+import * as React from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import { listItemStore } from '../state/listItems.js';
 
 function ListItem ({ name, id }) {
 
-    const { dispatch } = useContext(listItemStore);
+    const { dispatch } = React.useContext(listItemStore);
 
     return html`
         <li key=${id}>

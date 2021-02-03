@@ -1,11 +1,11 @@
-import { useContext } from 'https://cdn.skypack.dev/react';
+import * as React from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import { listItemStore } from '../state/listItems.js';
 import List from './List.js';
 
 const ListControls = () => {
 
-    const { dispatch } = useContext(listItemStore);
+    const { dispatch } = React.useContext(listItemStore);
 
     return html`<div>
         <style>
@@ -13,7 +13,7 @@ const ListControls = () => {
             display: flex;
         }
         </style>
-        <div className="lists">
+        <div className="lists" title="List of names">
             <${List}/>
         </div>
         <button onClick=${() => dispatch({ type: 'ADD_ITEM', name: 'Jenny' })}>Add</button>
