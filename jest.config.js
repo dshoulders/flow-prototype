@@ -115,7 +115,7 @@ module.exports = {
 
   // The root directory that Jest should scan for tests and modules within
   // rootDir: undefined,
-
+  
   // A list of paths to directories that Jest should use to search for files in
   // roots: [
   //   "<rootDir>"
@@ -175,7 +175,7 @@ module.exports = {
   // transform: undefined,
   transform: {
     // we need this to transform our internal react imports to npm packages
-    "\\.js$": "<rootDir>/react-transformer.js",
+    "\\.js$": "./react-transformer.js",
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation

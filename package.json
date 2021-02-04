@@ -2,13 +2,16 @@
   "name": "flow-prototype",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest --no-cache"
+    "build": "NODE_ENV=dev npx babel src --out-dir out",
+    "test": "BABEL_ENV=test jest src --no-cache"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dshoulders/flow-prototype.git"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.13",
+    "@babel/preset-typescript": "^7.12.13",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@testing-library/jest-dom": "^5.11.9",
