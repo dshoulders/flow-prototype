@@ -1,4 +1,4 @@
-import { useContext } from 'https://cdn.skypack.dev/react';
+import { useContext } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import { listItemStore, ListItem as TListItem } from '../state/listItems.js';
 

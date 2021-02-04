@@ -1,4 +1,4 @@
-import { useContext, lazy, Suspense } from 'https://cdn.skypack.dev/react';
+import { useContext, lazy, Suspense } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import { listItemStore } from '../state/listItems.js';
 import components from '../config/components.js';

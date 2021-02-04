@@ -1,4 +1,4 @@
-import { createContext, useReducer } from 'https://cdn.skypack.dev/react';
+import { createContext, useReducer } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 
 export interface ListItem {
