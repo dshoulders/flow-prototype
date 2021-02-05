@@ -6,9 +6,13 @@ export interface ListItem {
     name: String,
 };
 
-export interface Action { 
+export interface Action<TPayload> { 
     type: String, 
-    payload: any 
+    payload: TPayload 
+};
+
+export interface Dispatch {
+    (action: Action<ListItem>)
 };
 
 const getID: () => Number = (() => {
@@ -27,7 +31,7 @@ const { Provider } = listItemStore;
 
 const ListItemProvider: Function = ( { children } ) => {
 
-    const [listItems, dispatch]: [ ListItem[], Function ] = useReducer((listItems: ListItem[], action: Action) => {
+    const [listItems, dispatch]: [ ListItem[], Function ] = useReducer((listItems: ListItem[], action: Action<ListItem>) => {
 
         switch (action.type) {
             case 'ADD_ITEM':
