@@ -2,7 +2,7 @@ import { useContext } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import { listItemStore, ListItem as TListItem, Dispatch } from '../state/listItems.js';
 
-function ListItem ({ name, id }: TListItem) {
+const ListItem: React.FC<TListItem> = ({ name, id }) => {
 
     const dispatch: Dispatch  = useContext(listItemStore).dispatch;
 
