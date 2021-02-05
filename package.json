@@ -6,7 +6,7 @@
     "compile": "src/**/*.{ts,js}"
   },
   "scripts": {
-    "type-check": "tsc",
+    "check-types": "tsc",
     "test": "jest src --no-cache",
     "build": "node build.js",
     "serve": "http-server out",
