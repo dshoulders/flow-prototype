@@ -1,21 +1,10 @@
 import { createContext, useReducer } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
+import { Action, ActionType } from "./actionTypes.js";
 
 export interface ListItem {
     id: Number,
     name: String,
-};
-
-export interface Action<ActionType, TPayload> { 
-    type: ActionType, 
-    payload: TPayload 
-};
-
-export enum ActionType {
-    addItem = 'ADD_ITEM',
-    removeItem = 'REMOVE_ITEM',
-    reverseItems = 'REVERSE_ITEMS',
-    renameItems = 'RENAME_ITEMS',
 };
 
 export interface Dispatch {
