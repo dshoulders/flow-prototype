@@ -13,7 +13,7 @@ function List (props) {
         <${Suspense} fallback=${html`<div>loading...</div>`}>
             <ul>                
                 ${
-                    listItems.map(item => html`<${ListItem} name=${item.name} id=${item.id} />`)
+                    listItems.map(item => html`<${ListItem} name=${item.name} id=${item.id} key=${item.id} />`)
                 }
             </ul>
         </${Suspense}>
