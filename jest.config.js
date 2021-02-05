@@ -79,6 +79,11 @@ module.exports = {
     //   "tsx",
     //   "node"
     // ],
+
+    moduleFileExtensions: [
+      "js",
+      "ts",
+    ],
   
     // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
     // moduleNameMapper: {},
@@ -109,6 +114,7 @@ module.exports = {
   
     // A path to a custom resolver
     // resolver: undefined,
+    resolver: 'jest-ts-webcompat-resolver',
   
     // Automatically restore mock state between every test
     // restoreMocks: false,
@@ -175,7 +181,7 @@ module.exports = {
     // transform: undefined,
     transform: {
       // we need this to transform our internal react imports to npm packages
-      "\\.js$": "./react-transformer.js",
+      "\\.[jt]s$": "./react-transformer.js",
     },
   
     // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
