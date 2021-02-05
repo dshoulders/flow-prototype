@@ -6,13 +6,20 @@ export interface ListItem {
     name: String,
 };
 
-export interface Action<TPayload> { 
-    type: String, 
+export interface Action<ActionType, TPayload> { 
+    type: ActionType, 
     payload: TPayload 
 };
 
+export enum ActionType {
+    addItem = 'ADD_ITEM',
+    removeItem = 'REMOVE_ITEM',
+    reverseItems = 'REVERSE_ITEMS',
+    renameItems = 'RENAME_ITEMS',
+};
+
 export interface Dispatch {
-    (action: Action<ListItem>)
+    (action: Action<ActionType, ListItem>)
 };
 
 const getID: () => Number = (() => {
@@ -26,24 +33,24 @@ const initialState: ListItem[] = [
     { id: getID(), name: 'Nigel' }, 
 ];
 
-const reducer = (listItems: ListItem[], action: Action<ListItem>) => {
+const reducer = (listItems: ListItem[], action: Action<ActionType, ListItem>) => {
 
     switch (action.type) {
-        case 'ADD_ITEM':
+        case ActionType.addItem:
             return  [
                 ...listItems,
                 { id: getID(), name: action.payload.name },
             ];
 
-        case 'REMOVE_ITEM':
+        case ActionType.removeItem:
             return listItems.filter((item) => {
                 return item.id !== action.payload.id;
             });
 
-        case 'REVERSE_ITEMS':
+        case ActionType.reverseItems:
             return [...listItems.reverse()];
 
-        case 'RENAME_ITEMS':
+        case ActionType.renameItems:
             return listItems.map(li => {
                 li.name = 'Barry';
                 return li;

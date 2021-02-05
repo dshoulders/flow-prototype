@@ -1,6 +1,6 @@
 import { useContext } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
-import { listItemStore, ListItem as TListItem, Dispatch } from '../state/listItems.js';
+import { listItemStore, ListItem as TListItem, Dispatch, ActionType } from '../state/listItems.js';
 
 const ListItem: React.FC<TListItem> = ({ name, id }) => {
 
@@ -11,7 +11,7 @@ const ListItem: React.FC<TListItem> = ({ name, id }) => {
             <button 
                 onClick=${
                     () => dispatch({ 
-                        type: 'REMOVE_ITEM', 
+                        type: ActionType.removeItem, 
                         payload: { id, name: null }
                     })
                 }
