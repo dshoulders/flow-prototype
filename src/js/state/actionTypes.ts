@@ -8,4 +8,6 @@ export enum ActionType {
     removeItem = 'REMOVE_ITEM',
     reverseItems = 'REVERSE_ITEMS',
     renameItems = 'RENAME_ITEMS',
+
+    pageResponse = 'PAGE_RESPONSE',
 };

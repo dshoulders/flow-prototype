@@ -2,5 +2,7 @@
 // Or just a get list of the custom components from the engine and merge them with internal list
 
 export default {
-    'list-item': './ListItem.js',
+    'vertical_flow': './Container.js',
+    'input': './InputText.js',
+    'presentation': './Presentation.js',
 };
