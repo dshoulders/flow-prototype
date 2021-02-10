@@ -45,7 +45,7 @@ function Root ({ flowId, flowVersionId }) {
 
 
     return html`
-        <div>
+        <div className="flow">
             ${
                 mainContainer ? html`<${ComponentLoader} id=${mainContainer.id} type=${mainContainer.containerType} />` : 'loading map element...'
             }            

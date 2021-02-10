@@ -14,7 +14,7 @@ const clean = (cb) => {
     console.log('Copying static files')
 
     // Copy static files
-    copyfiles(['src/index.html', 'out'], 1, cb);
+    copyfiles(['src/index.html', 'src/css/**/*', 'out'], 1, cb);
 }
 
 const build = async () => {
