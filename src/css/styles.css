@@ -1,6 +1,40 @@
 
+.flow {
+    --font-family: 'Roboto', sans-serif;
+    --font-size: 16px;
+
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+}
 
 .flow .container {
-    border: 1px solid #ccc;
-    padding: 1rem;
+    margin-top: var(--font-size);
+    margin-bottom: var(--font-size);
+}
+
+.flow .form-control {
+    display: flex;
+    flex-direction: column;
+}
+
+.flow .label {
+    max-width: calc(var(--font-size) * 35);
+}
+
+.flow .required {
+    color: #ce1919;
+    margin-left: 4px;
+    text-decoration: none;
+}
+
+.flow .input {
+    max-width: 300px;
+    background-color: #ddd;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 8px 12px;
+}
+
+.flow .input:focus {
+    border-color: #bbb;
 }

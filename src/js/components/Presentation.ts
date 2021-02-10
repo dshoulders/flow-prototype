@@ -1,16 +1,18 @@
-import { useContext } from '../lib/react/react-internal.js';
-import { componentStore } from '../state/components.js';
 import { html } from '../utils/markup.js';
+import useComponent from "../hooks/useComponent.js";
+
+function createMarkup(str) {
+    return {__html: str};
+}
 
 function Presentation ({ id, type }) {
 
-    const { components } = useContext(componentStore);
+    const component = useComponent(id);
+
+    // TODO: Don't use dangerouslySetInnerHTML
 
     return html`
-        <div>
-        ${ id }
-        presentation
-        </div>
+        <div dangerouslySetInnerHTML=${createMarkup(component.content)} />
     `;
 }
 

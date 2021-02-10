@@ -15,7 +15,6 @@ function Container ({ id, type }) {
 
     return html`
         <div className="container">
-        ${ id }
         ${
             children.map(child => html`<${ComponentLoader} id=${child.id} type=${child.type} /}>`)
         }
