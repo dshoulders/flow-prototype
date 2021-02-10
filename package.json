@@ -9,7 +9,7 @@
     "check-types": "tsc",
     "test": "jest src --no-cache",
     "build": "node build.js",
-    "serve": "http-server out",
+    "serve": "http-server out -c-1",
     "watch": "nodemon --watch src -e js,ts,html,css --exec npm run build",
     "start": "./start.sh"
   },

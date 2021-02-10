@@ -7,7 +7,7 @@ function ComponentLoader ({ id, type = '' }) {
     const Component = lazy(() => import(components[type.toLowerCase()]));
 
     return html`
-        <${Suspense} fallback=${html`<div>loading component...</div>`}>
+        <${Suspense} fallback=${html`<div></div>`}>
             <${Component} id=${id} type=${type} />
         </${Suspense}>
     `;

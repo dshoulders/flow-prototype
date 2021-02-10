@@ -1,0 +1,54 @@
+
+.flow {
+    --font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    --font-size: 16px;
+    --color: #222;
+    --background-color: transparent;
+
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    line-height: 1.5em;
+    color: var(--color);
+    background-color: var(--background-color);
+}
+
+.flow .container {
+    margin-top: var(--font-size);
+    margin-bottom: var(--font-size);
+}
+
+.flow .form-control {
+    display: flex;
+    flex-direction: column;
+}
+
+.flow .label {
+    max-width: calc(var(--font-size) * 35);
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.flow .required {
+    color: #ce1919;
+    margin-left: 4px;
+    text-decoration: none;
+}
+
+.flow .input {
+    max-width: 300px;
+    border: 1px solid;
+    border-radius: 3px;
+    padding: 8px 12px;
+    font-size: var(--font-size);
+    color: var(--color);
+}
+
+.flow .outcome {
+    border: 1px solid #4c6088;
+    border-radius: 3px;
+    padding: 8px 12px;
+    font-size: var(--font-size);
+    color: #fbfbfb;
+    background-color: #4c6088;
+    font-weight: bold;
+}

@@ -5,10 +5,12 @@ import { PLATFROM_URI, InvokeType } from "../constants.js";
 import ComponentLoader from "./ComponentLoader.js";
 import { componentStore, Dispatch } from '../state/components.js';
 import { ActionType } from "../state/actionTypes.js";
+import Outcome from "./Outcome.js";
 
 function Root ({ flowId, flowVersionId }) {
 
     const [mainContainer, setMainContainer] = useState(null);
+    const [outcomes, setOutcomes] = useState([]);
 
     const dispatch: Dispatch = useContext(componentStore).dispatch;
 
@@ -41,6 +43,8 @@ function Root ({ flowId, flowVersionId }) {
         const mainContainer = mapElementInvokeResponses[0]?.pageResponse?.pageContainerResponses[0] ?? null;
 
         setMainContainer(mainContainer);
+
+        setOutcomes(mapElementInvokeResponses[0]?.outcomeResponses ?? []);
     }, []);
 
 
@@ -48,7 +52,10 @@ function Root ({ flowId, flowVersionId }) {
         <div className="flow">
             ${
                 mainContainer ? html`<${ComponentLoader} id=${mainContainer.id} type=${mainContainer.containerType} />` : 'loading map element...'
-            }            
+            }   
+            ${
+                outcomes.map(outcome => html`<${Outcome} outcome=${outcome} />`)
+            }         
         </div>
     `;
 }
