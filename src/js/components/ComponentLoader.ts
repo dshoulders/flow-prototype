@@ -1,16 +1,18 @@
-import { lazy, Suspense } from '../lib/react/react-internal.js';
+import { lazy, Suspense, Component } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import components from '../config/components.js';
 
-function ComponentLoader ({ id, type = '' }) {
+class ComponentLoader extends Component<{ id: string, type: string}, null> {
 
-    const Component = lazy(() => import(components[type.toLowerCase()]));
+    Component = lazy(() => import(components[this.props.type.toLowerCase()]));
 
-    return html`
-        <${Suspense} fallback=${html`<div></div>`}>
-            <${Component} id=${id} type=${type} />
-        </${Suspense}>
-    `;
+    render() {
+        return html`
+            <${Suspense} fallback=${html`<div></div>`}>
+                <${this.Component} id=${this.props.id} type=${this.props.type} />
+            </${Suspense}>
+        `;
+    }
 }
 
 export default ComponentLoader;

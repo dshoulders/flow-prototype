@@ -1,13 +1,10 @@
 import { createContext, useReducer } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
-import { Action, ActionType } from "./actionTypes.js";
+import { Renderable } from "../types/interfaces.js";
 
-export interface Renderable {
-    attributes: string[],
-    id: string,
-    developerName: string,
-    label: string,
-    order: number,
+export enum ActionType {
+    valueChange = 'VALUE_CHANGE',
+    pageResponse = 'PAGE_RESPONSE',
 };
 
 export interface Layout extends Renderable {
@@ -25,7 +22,7 @@ export interface Component extends Layout {
     componentType: string,
     content: string,
     contentType: string,
-    contentValue: string,
+    contentValue: (string|number|boolean),
     fileDataRequest: any,
     hasEvents: boolean,
     height: number,
@@ -49,8 +46,21 @@ export interface Container extends Layout {
     containerType: string,
 };
 
+export interface Outcome extends Renderable {
+    isBulkAction: boolean,
+    isOut: boolean,
+    pageActionBindingType: string,
+    pageActionType: string,
+    pageObjectBindingId: string,
+}
+
+interface Action { 
+    type: ActionType, 
+    payload: Component 
+};
+
 export interface Dispatch {
-    (action: Action<ActionType, Component>)
+    (action: Action)
 };
 
 const flattenContainers = (containers, parentId = null, collection = []) => {
@@ -106,19 +116,35 @@ const flattenPageResponse = (pageResponse): Layout[] => {
     const containers = consolidateContainers(flattenedContainerMeta, pageResponse);
     const components = consolidateComponents(pageResponse);
 
-    console.log([...containers, ...components]);
-
     return [
         ...containers,
         ...components,
     ];
 };
 
-const reducer = (components: Component[], action: Action<ActionType, Component>) => {
+const updateValue = (id: string, value: (string|number|boolean), components: Component[]): Component[] => {
+    const updatedComponents = components.map((component: Component) :Component => {
+
+        if (component.id !== id) {
+            return component;
+        }
+
+        return {
+            ...component,
+            contentValue: value,
+        }
+    });
+    return updatedComponents;
+}
+
+const reducer = (components: Component[], action: Action) => {
 
     switch (action.type) {
         case ActionType.pageResponse:
             return flattenPageResponse(action.payload);
+
+        case ActionType.valueChange:
+            return updateValue(action.payload.id, action.payload.contentValue, components);
 
         default:
             return components;

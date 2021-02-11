@@ -10,7 +10,13 @@ export interface InitailizeRequest {
 export interface InvokeRequest {
     invokeType: InvokeType,
     mapElementInvokeRequest: {
-        pageRequest?: string,
+        pageRequest?: {
+            pageComponentInputResponses: {
+                pageComponentId: string,
+                contentValue: (string|number|boolean),
+                objectData: any,
+            }[]
+        },
         selectedOutcomeId?: string,
     },
     stateId: string,

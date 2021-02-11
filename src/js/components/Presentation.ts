@@ -1,5 +1,5 @@
 import { html } from '../utils/markup.js';
-import useComponent from "../hooks/useComponent.js";
+import { useComponent } from "../hooks/hooks.js";
 
 function createMarkup(str) {
     return {__html: str};
