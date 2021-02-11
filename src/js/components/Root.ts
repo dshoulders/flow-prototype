@@ -4,19 +4,19 @@ import { postData, InitailizeRequest, InvokeRequest } from '../utils/network.js'
 import { PLATFROM_URI, InvokeType } from "../constants.js";
 import ComponentLoader from "./ComponentLoader.js";
 import { Component, componentStore, Dispatch as DispatchComponents, ActionType as ActionTypeComponents } from '../context/components.js';
-import { stateStore, Dispatch as DispatchState, ActionType as ActionTypeState } from '../context/state.js';
+import { State, stateStore, Dispatch as DispatchState, ActionType as ActionTypeState } from '../context/state.js';
 import { Outcome as TOutcome, outcomeStore, Dispatch as DispatchOutcomes, ActionType as ActionTypeOutcomes } from '../context/outcomes.js';
 import Outcome from "./Outcome.js";
-import { useComponent, invoke } from '../hooks/hooks.js';
+import { useComponent, useInvoke } from '../hooks/hooks.js';
 
 function Root ({ flowId, flowVersionId }) {
 
-    const dispatchState: DispatchState = useContext(stateStore).dispatch;
+    const { dispatch: dispatchState, state }: { dispatch: DispatchState, state: State } = useContext(stateStore);
     const { dispatch: dispatchOutcomes, outcomes }: { dispatch: DispatchOutcomes, outcomes: TOutcome[] } = useContext(outcomeStore);
     const { dispatch: dispatchComponents, components }: { dispatch: DispatchComponents, components: Component[]} = useContext(componentStore);
 
     useEffect(() => {
-        
+
         const doStuff = async () => {
 
             const initailizeRequest: InitailizeRequest = {
@@ -26,44 +26,44 @@ function Root ({ flowId, flowVersionId }) {
                 },
             };
 
-            const { stateId, stateToken, currentMapElementId } = await postData(`${PLATFROM_URI}/api/run/1`, initailizeRequest);
+            const initializeResponse = await postData(`${PLATFROM_URI}/api/run/1`, initailizeRequest);
 
             dispatchState({
                 type: ActionTypeState.pageResponse,
                 payload: {
-                    stateId, 
-                    stateToken, 
-                    currentMapElementId,
+                    stateId: initializeResponse.stateId, 
+                    stateToken: initializeResponse.stateToken, 
+                    currentMapElementId: initializeResponse.currentMapElementId,
                 },
             });        
 
             const invokeRequest: InvokeRequest = {
                 invokeType: InvokeType.forward,
                 mapElementInvokeRequest: {},
-                stateId,
-                stateToken,
-                currentMapElementId,
+                stateId: initializeResponse.stateId,
+                stateToken: initializeResponse.stateToken,
+                currentMapElementId: initializeResponse.currentMapElementId,
             };
 
-            const { mapElementInvokeResponses } = await postData(`${PLATFROM_URI}/api/run/1/state/${currentMapElementId}`, invokeRequest);
+            const invokeResponse = await postData(`${PLATFROM_URI}/api/run/1/state/${initializeResponse.stateId}`, invokeRequest);
 
             dispatchState({
                 type: ActionTypeState.pageResponse,
                 payload: {
-                    stateId, 
-                    stateToken, 
-                    currentMapElementId,
+                    stateId: invokeResponse.stateId, 
+                    stateToken: invokeResponse.stateToken, 
+                    currentMapElementId: invokeResponse.currentMapElementId,
                 },
             })
 
             dispatchComponents({
                 type: ActionTypeComponents.pageResponse,
-                payload: mapElementInvokeResponses[0].pageResponse,
+                payload: invokeResponse,
             });
 
             dispatchOutcomes({
                 type: ActionTypeOutcomes.pageResponse,
-                payload: mapElementInvokeResponses[0].outcomeResponses,
+                payload: invokeResponse,
             });
         };
 

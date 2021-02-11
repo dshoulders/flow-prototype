@@ -1,6 +1,8 @@
 import { createContext, useReducer } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import { Renderable } from "../types/interfaces.js";
+import { InvokeType } from '../constants.js';
+import components from '../config/components.js';
 
 export enum ActionType {
     valueChange = 'VALUE_CHANGE',
@@ -137,11 +139,44 @@ const updateValue = (id: string, value: (string|number|boolean), components: Com
     return updatedComponents;
 }
 
+const mergeComponentData = (pageResponse, components) => {
+    const dataResponses = [
+        ...pageResponse.pageComponentDataResponses,
+        ...pageResponse.pageContainerDataResponses,
+    ];
+
+    return components.map((component) => {
+        const dataResponse = dataResponses.find(
+            dataResponse => dataResponse.pageContainerId === component.id || dataResponse.pageComponentId === component.id
+        );
+
+        if (dataResponse === null) {
+            return component;
+        }
+
+        return {
+            ...component,
+            ...dataResponse,
+        };
+    });
+};
+
+const processInvokeResponse = (response, components) => {
+
+    switch (response.invokeType) {
+        case InvokeType.forward:
+            return flattenPageResponse(response.mapElementInvokeResponses[0].pageResponse);
+
+        case InvokeType.sync:
+            return mergeComponentData(response.mapElementInvokeResponses[0].pageResponse, components);
+    }
+};
+
 const reducer = (components: Component[], action: Action) => {
 
     switch (action.type) {
         case ActionType.pageResponse:
-            return flattenPageResponse(action.payload);
+            return processInvokeResponse(action.payload, components);
 
         case ActionType.valueChange:
             return updateValue(action.payload.id, action.payload.contentValue, components);

@@ -27,7 +27,7 @@ const reducer = (outcomes: Outcome[], action: Action) => {
 
     switch (action.type) {
         case ActionType.pageResponse:
-            return action.payload;
+            return action.payload.mapElementInvokeResponses[0].outcomeResponses;
 
         default:
             return outcomes;
