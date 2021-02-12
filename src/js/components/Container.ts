@@ -3,12 +3,12 @@ import { componentStore, Layout } from '../context/components.js';
 import { html } from '../utils/markup.js';
 import ComponentLoader from './ComponentLoader.js';
 
-function Container ({ id, type }) {
+function Container ({ component }) {
 
     const components: Layout[] = useContext(componentStore).components;
 
     // children can be containers or compnents
-    const children = components?.filter(c => c.parentId === id) ?? [];
+    const children = components?.filter(c => c.parentId === component.id) ?? [];
     children.sort((a, b) => a.order - b.order);
 
     return html`

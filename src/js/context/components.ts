@@ -2,10 +2,10 @@ import { createContext, useReducer } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import { Renderable } from "../types/interfaces.js";
 import { InvokeType } from '../constants.js';
-import components from '../config/components.js';
 
 export enum ActionType {
     valueChange = 'VALUE_CHANGE',
+    updateComponent = 'COMPONENT_UPDATE',
     pageResponse = 'PAGE_RESPONSE',
 };
 
@@ -124,6 +124,21 @@ const flattenPageResponse = (pageResponse): Layout[] => {
     ];
 };
 
+const updateComponent = (partialComponent, components) => {
+    const updatedComponents = components.map((component: Component) :Component => {
+
+        if (component.id !== partialComponent.id) {
+            return component;
+        }
+
+        return {
+            ...component,
+            ...partialComponent,
+        }
+    });
+    return updatedComponents;
+}
+
 const updateValue = (id: string, value: (string|number|boolean), components: Component[]): Component[] => {
     const updatedComponents = components.map((component: Component) :Component => {
 
@@ -180,6 +195,9 @@ const reducer = (components: Component[], action: Action) => {
 
         case ActionType.valueChange:
             return updateValue(action.payload.id, action.payload.contentValue, components);
+
+        case ActionType.updateComponent:
+            return updateComponent(action.payload, components);
 
         default:
             return components;

@@ -1,13 +1,10 @@
 import { html } from '../utils/markup.js';
-import { useComponent } from "../hooks/hooks.js";
 
 function createMarkup(str) {
     return {__html: str};
 }
 
-function Presentation ({ id, type }) {
-
-    const component = useComponent(id);
+function Presentation ({ component }) {
 
     // TODO: Don't use dangerouslySetInnerHTML
 
