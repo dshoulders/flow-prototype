@@ -50,4 +50,50 @@
     color: #fbfbfb;
     background-color: #4c6088;
     font-weight: bold;
+    cursor: pointer;
+    transition: background-color linear 200ms;
+}
+
+.flow .outcome .loader {
+    display: inline-block;
+    position: relative;
+    width: 0;
+    height: 18px;
+    opacity: 0;
+    transition: width ease-in-out 200ms, opacity ease-in-out 200ms;
+}
+
+.flow .outcome .loader::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 6px;
+    bottom: 0;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    border-top: 2px solid transparent;
+    animation: load-animate infinite linear 1s;
+}
+
+.flow .outcome.is-loading {
+    background-color: #7286ad;
+}
+
+.flow .outcome.is-loading .loader {
+    opacity: 1;
+    width: 18px;
+}
+
+@keyframes load-animate {
+    0% { 
+        transform: rotate(0deg);
+    }
+    50% { 
+        transform: rotate(180deg);
+        /* opacity: .35; */
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
