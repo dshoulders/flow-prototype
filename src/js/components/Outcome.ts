@@ -1,8 +1,7 @@
 import { html } from '../utils/markup.js';
 import { useContext, useState } from '../lib/react/react-internal.js';
-import { Component, componentStore, Dispatch as DispatchComponents, ActionType as ActionTypeComponents } from '../context/components.js';
+import { Component, componentStore, Dispatch as DispatchComponents, ActionType as ActionTypeComponents, Outcome as TOutcome } from '../context/components.js';
 import { State, stateStore, Dispatch as DispatchState, ActionType as ActionTypeState } from '../context/state.js';
-import { Outcome as TOutcome, outcomeStore, Dispatch as DispatchOutcomes, ActionType as ActionTypeOutcomes } from '../context/outcomes.js';
 import { InvokeRequest, postData } from '../utils/network.js';
 import { InvokeType, PLATFROM_URI } from '../constants.js';
 
@@ -11,7 +10,6 @@ const Outcome = ({ component: outcome }: { component: TOutcome }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const { dispatch: dispatchState, state }: { dispatch: DispatchState, state: State} = useContext(stateStore); 
-    const { dispatch: dispatchOutcomes, outcomes }: { dispatch: DispatchOutcomes, outcomes: TOutcome[] } = useContext(outcomeStore);
     const { dispatch: dispatchComponents, components }: { dispatch: DispatchComponents, components: Component[]} = useContext(componentStore);
 
     const onClick = async () => {
