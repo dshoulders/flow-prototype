@@ -112,15 +112,23 @@ const consolidateComponents = (pageResponse): Component[] => {
     });
 };
 
-const flattenPageResponse = (pageResponse): Layout[] => {
-    const flattenedContainerMeta = flattenContainers(pageResponse.pageContainerResponses);
+const flattenPageResponse = (invokeResponse): Layout[] => {
 
+    const { pageResponse } = invokeResponse.mapElementInvokeResponses[0];
+    
+    const flattenedContainerMeta = flattenContainers(pageResponse.pageContainerResponses);
+    
     const containers = consolidateContainers(flattenedContainerMeta, pageResponse);
     const components = consolidateComponents(pageResponse);
+    const outcomes = invokeResponse.mapElementInvokeResponses[0].outcomeResponses.map(outcome => ({
+        ...outcome,
+        type: 'outcome'
+    }));
 
     return [
         ...containers,
         ...components,
+        ...outcomes,
     ];
 };
 
@@ -180,7 +188,7 @@ const processInvokeResponse = (response, components) => {
 
     switch (response.invokeType) {
         case InvokeType.forward:
-            return flattenPageResponse(response.mapElementInvokeResponses[0].pageResponse);
+            return flattenPageResponse(response);
 
         case InvokeType.sync:
             return mergeComponentData(response.mapElementInvokeResponses[0].pageResponse, components);

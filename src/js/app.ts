@@ -2,7 +2,6 @@ import { render } from './lib/react-dom/react-dom-internal.js';
 import { html } from './utils/markup.js';
 import { StateProvider } from './context/state.js';
 import { ComponentProvider } from './context/components.js';
-import { OutcomeProvider } from './context/outcomes.js';
 import Root from './components/Root.js';
 
 // Import statements should all use .js extension so that they are correct when transpiled
@@ -20,9 +19,7 @@ function App () {
     return html`
         <${StateProvider}>
             <${ComponentProvider}>
-                <${OutcomeProvider}>
-                    <${Root} flowId=${flowId} flowVersionId=${flowVersionId}/> 
-                </${OutcomeProvider}>
+                <${Root} flowId=${flowId} flowVersionId=${flowVersionId}/>
             </${ComponentProvider}>
         </${StateProvider}>
     `;

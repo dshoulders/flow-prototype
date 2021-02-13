@@ -5,13 +5,10 @@ import { PLATFROM_URI, InvokeType } from "../constants.js";
 import ComponentLoader from "./ComponentLoader.js";
 import { Component, componentStore, Dispatch as DispatchComponents, ActionType as ActionTypeComponents } from '../context/components.js';
 import { State, stateStore, Dispatch as DispatchState, ActionType as ActionTypeState } from '../context/state.js';
-import { Outcome as TOutcome, outcomeStore, Dispatch as DispatchOutcomes, ActionType as ActionTypeOutcomes } from '../context/outcomes.js';
-import Outcome from "./Outcome.js";
 
 function Root ({ flowId, flowVersionId }) {
 
     const { dispatch: dispatchState, state }: { dispatch: DispatchState, state: State } = useContext(stateStore);
-    const { dispatch: dispatchOutcomes, outcomes }: { dispatch: DispatchOutcomes, outcomes: TOutcome[] } = useContext(outcomeStore);
     const { dispatch: dispatchComponents, components }: { dispatch: DispatchComponents, components: Component[]} = useContext(componentStore);
 
     useEffect(() => {
@@ -59,17 +56,13 @@ function Root ({ flowId, flowVersionId }) {
                 type: ActionTypeComponents.pageResponse,
                 payload: invokeResponse,
             });
-
-            dispatchOutcomes({
-                type: ActionTypeOutcomes.pageResponse,
-                payload: invokeResponse,
-            });
         };
 
         doStuff();
     }, []);
 
     const mainContainer = components.find(component => component.parentId === null) ?? null;
+    const outcomes = components.filter(component => component.type === 'outcome');
 
     return html`
         <div className="flow">
@@ -77,7 +70,7 @@ function Root ({ flowId, flowVersionId }) {
                 mainContainer ? html`<${ComponentLoader} id=${mainContainer.id} type=${mainContainer.type} />` : 'loading map element...'
             }   
             ${
-                outcomes.map(outcome => html`<${Outcome} outcome=${outcome} />`)
+                outcomes.map(outcome => html`<${ComponentLoader} id=${outcome.id} type=${'outcome'} />`)
             }         
         </div>
     `;

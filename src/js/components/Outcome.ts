@@ -6,7 +6,7 @@ import { Outcome as TOutcome, outcomeStore, Dispatch as DispatchOutcomes, Action
 import { InvokeRequest, postData } from '../utils/network.js';
 import { InvokeType, PLATFROM_URI } from '../constants.js';
 
-const Outcome = ({ outcome }: { outcome: TOutcome }) => {
+const Outcome = ({ component: outcome }: { component: TOutcome }) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -55,11 +55,6 @@ const Outcome = ({ outcome }: { outcome: TOutcome }) => {
 
         dispatchComponents({
             type: ActionTypeComponents.pageResponse,
-            payload: response,
-        });
-
-        dispatchOutcomes({
-            type: ActionTypeOutcomes.pageResponse,
             payload: response,
         });
 
