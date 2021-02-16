@@ -3,6 +3,7 @@ const FileList = require('filelist').FileList;
 const rimraf = require('rimraf').sync;
 const copyfiles = require('copyfiles');
 const { performance } = require('perf_hooks');
+const { generateFileList } = require('./generate-file-list');
 
 const clean = (cb) => {
 
@@ -14,7 +15,13 @@ const clean = (cb) => {
     console.log('Copying static files')
 
     // Copy static files
-    copyfiles(['src/index.html', 'src/css/**/*', 'out'], 1, cb);
+    copyfiles([
+        'src/index.html', 
+        'src/css/**/*',
+        'src/img/**/*', 
+        'src/flow.webmanifest',
+        'out' // final entry in the array is the destination directory
+    ], 1, cb);
 }
 
 const build = async () => {
@@ -35,7 +42,7 @@ const build = async () => {
         await service.build({
             color: true,
             entryPoints: fl.toArray(),
-            outdir: 'out/js',
+            outdir: 'out',
             logLevel: 'error',
             target: 'es2020',
             format: 'esm'
@@ -49,6 +56,9 @@ const build = async () => {
     } finally {
         service.stop();
     }
+
+    // generate manifest file
+    generateFileList();
 };
 
 clean(build);

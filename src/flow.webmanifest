@@ -1,0 +1,15 @@
+{
+  "name": "Basic flow",
+  "description": "Prints the provided name",
+  "icons": [
+      {
+          "src": "/img/favicon/144x144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+      }
+  ],
+  "start_url": "http://localhost:8080?flow-id=66b0c625-d865-412d-a766-be326790f62b&flow-version-id=7ad0d409-a9cd-45f2-a659-5b94b00dabb2",
+  "display": "fullscreen",
+  "theme_color": "#B12A34",
+  "background_color": "#B12A34"
+}
