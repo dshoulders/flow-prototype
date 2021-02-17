@@ -7,11 +7,12 @@
 
     --input-background-color: transparent;
 
-    --outcome-background-color: #bb5105;
-    --outcome-active-background-color: #c26f34;
+    --outcome-background-color: #204069;
+    --outcome-active-background-color: #285999;
 
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
     padding: var(--font-size);
     font-family: var(--font-family);
     font-size: var(--font-size);

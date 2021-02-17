@@ -1,4 +1,4 @@
-import { TENANT_ID, InvokeType } from "../constants.js";
+import { TENANT_ID, InvokeType, PLATFROM_URI } from "../constants.js";
 
 export interface InitailizeRequest {
     flowId: {
@@ -43,3 +43,26 @@ export async function postData(url = '', data = {}) {
     return response.json(); // parses JSON response into native JavaScript objects
 };
 
+export async function initialize(flowId, flowVersionId) {
+
+    const initailizeRequest: InitailizeRequest = {
+        flowId: {
+            id: flowId,
+            versionId: flowVersionId
+        },
+    };
+
+    const initializeResponse = await postData(`${PLATFROM_URI}/api/run/1`, initailizeRequest);     
+
+    const invokeRequest: InvokeRequest = {
+        invokeType: InvokeType.forward,
+        mapElementInvokeRequest: {},
+        stateId: initializeResponse.stateId,
+        stateToken: initializeResponse.stateToken,
+        currentMapElementId: initializeResponse.currentMapElementId,
+    };
+
+    const invokeResponse = await postData(`${PLATFROM_URI}/api/run/1/state/${initializeResponse.stateId}`, invokeRequest);
+
+    return invokeResponse;
+}

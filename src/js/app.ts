@@ -30,10 +30,10 @@ render(html`<${App}/>`, document.getElementById('app'));
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
         navigator.serviceWorker.register('../service-worker.js').then(function (registration) {
-            // Registration was successful
+            // Registration successful
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
         }, function (err) {
-            // registration failed :(
+            // Registration failed
             console.log('ServiceWorker registration failed: ', err);
         });
     });
