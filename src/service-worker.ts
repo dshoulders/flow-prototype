@@ -12,7 +12,7 @@ self.addEventListener('install', function (event: ExtendableEvent) {
                 return fetch('/file-list.json').then(function (response) {
                     return response.json();
                 }).then(function (files) {
-                    files.push('/?flow-id=66b0c625-d865-412d-a766-be326790f62b&flow-version-id=7ad0d409-a9cd-45f2-a659-5b94b00dabb2'); // capture html file url with query string
+                    files.push('/' + self.location.search); // capture html file url with query string
                     return cache.addAll(files);
                 });
             })
