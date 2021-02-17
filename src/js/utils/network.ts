@@ -66,3 +66,38 @@ export async function initialize(flowId, flowVersionId) {
 
     return invokeResponse;
 }
+
+export async function invoke({
+        stateId,
+        stateToken,
+        currentMapElementId,
+        selectedOutcomeId,
+        components,
+        invokeType,
+}) {
+    const pageComponentInputResponses = components.map(({ id, contentValue, objectData }) => ({
+        pageComponentId: id,
+        contentValue,
+        objectData, 
+    }));
+
+    const invokeRequest: InvokeRequest = {
+        invokeType,
+        stateId,
+        stateToken,
+        currentMapElementId,
+        mapElementInvokeRequest: {
+            pageRequest: {
+                pageComponentInputResponses,
+            },
+            selectedOutcomeId,
+        },
+    };
+
+    const response = await postData(
+        `${PLATFROM_URI}/api/run/1/state/${stateId}`, 
+        invokeRequest,
+    );
+
+    return response;
+}
