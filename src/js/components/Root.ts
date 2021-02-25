@@ -1,7 +1,7 @@
 import { InvokeType } from '../constants.js';
 import { useEffect, useState } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
-import { hubConnection, initialize, invoke, sync } from '../utils/network.js';
+import { hubConnection, initialize, invoke } from '../utils/network.js';
 import ComponentLoader from "./ComponentLoader.js";
 
 function Root ({ flowId, flowVersionId }) {
@@ -22,6 +22,8 @@ function Root ({ flowId, flowVersionId }) {
 
     useEffect(() => {
 
+        // Subscribe to collaborator invoke
+
         const receiveInvoke = (outcomeId) => {
             // A collaborator has invoked this outcome
             // We need to do the same 
@@ -35,6 +37,7 @@ function Root ({ flowId, flowVersionId }) {
 
     const invokeHandler = async ({ outcomeId, invokeType = InvokeType.forward }) => {
 
+        // Make an invoke request to the engine
         const invokeResponse = await invoke({
             stateId: appState.stateId,
             stateToken: appState.stateToken,
@@ -44,14 +47,16 @@ function Root ({ flowId, flowVersionId }) {
             invokeType,
         });
 
+        // Store the response as the application state
         setAppState(invokeResponse);
         
         return invokeResponse;
     };
 
-    const onInvoke = ({ outcomeId, invokeType = InvokeType.forward }) => {
+    const onInvoke = async ({ outcomeId, invokeType = InvokeType.forward }) => {
 
-        const invokeResponse = invokeHandler({ outcomeId, invokeType });
+        // Make invoke request and process the reponse
+        const invokeResponse = await invokeHandler({ outcomeId, invokeType });
 
         // Inform collaborators that we have invoked the outcome
         hubConnection.invoke('SendInvoke', outcomeId).catch(function (err) {
@@ -64,6 +69,7 @@ function Root ({ flowId, flowVersionId }) {
     const pageResponse = appState?.mapElementInvokeResponses[0]?.pageResponse ?? null;
     const mainContainer = pageResponse?.pageContainerResponses[0] ?? null;
     const pageOutcomes = appState?.mapElementInvokeResponses[0]?.outcomeResponses?.map(
+        // Add missing component type
         outcomeResponse => ({
             ...outcomeResponse, 
             componentType: 'outcome',

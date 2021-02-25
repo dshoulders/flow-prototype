@@ -2,7 +2,7 @@ import { html } from '../utils/markup.js';
 import { useState } from '../lib/react/react-internal.js';
 import { ComponentProps } from "./ComponentPropsProvider.js";
 
-const Outcome = ({ componentData: outcome, invoke }: ComponentProps) => {
+const Outcome = ({ componentData, invoke }: ComponentProps) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -13,7 +13,7 @@ const Outcome = ({ componentData: outcome, invoke }: ComponentProps) => {
         setIsLoading(true);
 
         await invoke({
-            outcomeId: outcome.id,
+            outcomeId: componentData.id,
         });
 
         setIsLoading(false);
@@ -24,7 +24,7 @@ const Outcome = ({ componentData: outcome, invoke }: ComponentProps) => {
             className='outcome${isLoading ? ' is-loading' : ''}' 
             onClick=${onClick}
         >
-            ${outcome.label}
+            ${componentData.label}
         <span className='loader' /></button>
     `;
 }

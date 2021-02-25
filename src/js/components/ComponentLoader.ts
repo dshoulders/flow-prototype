@@ -1,26 +1,28 @@
-import { lazy, Suspense, Component } from '../lib/react/react-internal.js';
+import { lazy, Suspense, useState, useEffect } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
 import components from '../config/components.js';
 import ComponentPropsProvider from './ComponentPropsProvider.js';
 
-class ComponentLoader extends Component<{ componentId: any, componentType: string, applicationData: any, updateApplicationData, invoke }, null> {
+const ComponentLoader = ({ componentType, componentId, applicationData, updateApplicationData, invoke }) => {
 
-    Component = lazy(() => import(components[this.props.componentType.toLowerCase()]));
+    const [Component, setComponent] = useState(lazy(() => import(components[componentType.toLowerCase()])));
 
-    render() {
+    useEffect(() => {
+        setComponent(lazy(() => import(components[componentType.toLowerCase()])));
+    }, [componentType])
 
-        return html`
+    return html`
             <${Suspense} fallback=${html`<div></div>`}>
                 <${ComponentPropsProvider} 
-                    Component=${this.Component} 
-                    componentId=${this.props.componentId} 
-                    applicationData=${this.props.applicationData} 
-                    updateApplicationData=${this.props.updateApplicationData}
-                    invoke=${this.props.invoke}
+                    Component=${Component} 
+                    componentId=${componentId} 
+                    applicationData=${applicationData} 
+                    updateApplicationData=${updateApplicationData}
+                    invoke=${invoke}
                 />
             </${Suspense}>
         `;
-    }
-}
+};
 
 export default ComponentLoader;
+

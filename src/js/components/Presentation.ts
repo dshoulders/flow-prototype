@@ -1,10 +1,11 @@
+import { ComponentProps } from '../types/interfaces.js';
 import { html } from '../utils/markup.js';
 
 function createMarkup(str) {
     return {__html: str};
 }
 
-function Presentation ({ componentData }) {
+function Presentation ({ componentData }: ComponentProps) {
     
     console.log(`Render Presentation: ${componentData.content}`)
 

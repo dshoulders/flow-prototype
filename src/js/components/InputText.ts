@@ -1,8 +1,8 @@
 import { html } from '../utils/markup.js';
 import { useEffect, useState } from '../lib/react/react-internal.js';
-import { InputProps } from '../types/interfaces.js';
+import { ComponentProps } from '../types/interfaces.js';
 
-const InputText = ({ componentData, updateComponent }: InputProps) => {
+const InputText = ({ componentData, updateComponent }: ComponentProps) => {
 
     const [value, setValue] = useState(componentData.contentValue);
 

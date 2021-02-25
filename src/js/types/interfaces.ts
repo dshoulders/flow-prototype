@@ -1,3 +1,5 @@
+import { InvokeType } from "../constants";
+
 export interface Renderable {
     attributes: string[],
     id: string,
@@ -55,4 +57,20 @@ export interface Outcome extends Renderable {
 export interface InputProps { 
     componentData: Component, 
     updateComponent: (component: Partial<Component>) => Component
+};
+
+interface InvokeOutcome {
+    ({ outcomeId, invokeType }?: { outcomeId?: string, invokeType?: InvokeType }): Promise<{any}>
+}
+
+interface UpdateComponent {
+    (component: Partial<Component>): void,
+}
+
+export interface ComponentProps { 
+    componentData: Component, 
+    updateComponent: UpdateComponent,
+    applicationData: any, 
+    updateApplicationData: UpdateComponent,
+    invokeOutcome: InvokeOutcome,
 };

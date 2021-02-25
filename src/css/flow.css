@@ -64,6 +64,10 @@
     transition: background-color linear 200ms;
 }
 
+.flow .outcome + .outcome {
+    margin-left: 15px;
+}
+
 .flow .outcome .loader {
     display: inline-block;
     position: relative;
