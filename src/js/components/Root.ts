@@ -1,7 +1,7 @@
 import { InvokeType } from '../constants.js';
 import { useEffect, useState } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
-import { initialize, invoke } from '../utils/network.js';
+import { hubConnection, initialize, invoke, sync } from '../utils/network.js';
 import ComponentLoader from "./ComponentLoader.js";
 
 function Root ({ flowId, flowVersionId }) {
@@ -20,6 +20,19 @@ function Root ({ flowId, flowVersionId }) {
 
     }, [flowId, flowVersionId, setAppState]);
 
+    useEffect(() => {
+
+        const receiveInvoke = (outcomeId) => {
+            // A collaborator has invoked this outcome
+            // We need to do the same 
+            invokeHandler({ outcomeId });
+        }
+
+        hubConnection.on("ReceiveInvoke", receiveInvoke);
+
+        return () => hubConnection.off("ReceiveInvoke", receiveInvoke);
+    }, [appState]);
+
     const invokeHandler = async ({ outcomeId, invokeType = InvokeType.forward }) => {
 
         const invokeResponse = await invoke({
@@ -33,6 +46,18 @@ function Root ({ flowId, flowVersionId }) {
 
         setAppState(invokeResponse);
         
+        return invokeResponse;
+    };
+
+    const onInvoke = ({ outcomeId, invokeType = InvokeType.forward }) => {
+
+        const invokeResponse = invokeHandler({ outcomeId, invokeType });
+
+        // Inform collaborators that we have invoked the outcome
+        hubConnection.invoke('SendInvoke', outcomeId).catch(function (err) {
+            return console.error(err.toString());
+        });
+
         return invokeResponse;
     };
 
@@ -65,7 +90,7 @@ function Root ({ flowId, flowVersionId }) {
                         componentType=${mainContainer.containerType}
                         applicationData=${appState}
                         updateApplicationData=${updateApplicationData}
-                        invoke=${invokeHandler}
+                        invoke=${onInvoke}
                     />` : 'loading map element...'
             }   
             ${
@@ -75,7 +100,7 @@ function Root ({ flowId, flowVersionId }) {
                         componentType='outcome'
                         applicationData=${appState}
                         updateApplicationData=${updateApplicationData}
-                        invoke=${invokeHandler}
+                        invoke=${onInvoke}
                     />`)
             }         
         </div>
