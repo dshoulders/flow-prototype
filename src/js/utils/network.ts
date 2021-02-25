@@ -1,3 +1,4 @@
+import * as signalR from 'https://www.unpkg.com/@aspnet/signalr@1.1.4/dist/esm/index.js';
 import { TENANT_ID, InvokeType, PLATFROM_URI } from "../constants.js";
 
 export interface InitailizeRequest {
@@ -101,3 +102,30 @@ export async function invoke({
 
     return response;
 }
+
+export const sync = async ({
+    stateId,
+    stateToken,
+    currentMapElementId,
+}) => {
+    const invokeRequest: InvokeRequest = {
+        invokeType: InvokeType.sync,
+        stateId,
+        stateToken,
+        currentMapElementId,
+        mapElementInvokeRequest: {},
+    };
+
+    const response = await postData(
+        `${PLATFROM_URI}/api/run/1/state/${stateId}`, 
+        invokeRequest,
+    );
+
+    return response;
+}
+
+export const hubConnection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5000/collaboration").build();
+
+hubConnection.start().catch(function (err) {
+    return console.error(err.toString());
+});

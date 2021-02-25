@@ -1,6 +1,8 @@
 import { html } from '../utils/markup.js';
 import { Component, Outcome } from '../types/interfaces.js';
 import { InvokeType } from '../constants.js';
+import { useEffect } from '../lib/react/react-internal.js';
+import { hubConnection } from '../utils/network.js';
 interface InvokeOutcome {
     ({ outcomeId, invokeType }?: { outcomeId?: string, invokeType?: InvokeType }): Promise<{any}>
 }
@@ -33,6 +35,19 @@ const flattenContainers = (containers, parentId = null, collection = []) => {
 
 
 const ComponentPropsProvider = ({ componentId, Component, applicationData, updateApplicationData, invoke }) => {
+
+    useEffect(() => {
+
+        const receiveComponent = (component) => {
+            if (component.id === componentId) {
+                updateComponent(component);
+            }
+        }
+
+        hubConnection.on("ReceiveComponent", receiveComponent);
+
+        return () => hubConnection.off("ReceiveComponent", receiveComponent);
+    }, []);
 
     const pageResponse = applicationData?.mapElementInvokeResponses[0]?.pageResponse ?? null;
 
@@ -94,10 +109,19 @@ const ComponentPropsProvider = ({ componentId, Component, applicationData, updat
         updateApplicationData(applicationData);
     };
 
+    const onUpdateComponent = (updatedComponentData) => {
+
+        hubConnection.invoke('SendComponent', updatedComponentData).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        updateComponent(updatedComponentData);
+    };
+
     return html`
         <${Component} 
             componentData=${componentData} 
-            updateComponent=${updateComponent} 
+            updateComponent=${onUpdateComponent} 
             applicationData=${applicationData} 
             updateApplicationData=${updateApplicationData} 
             childComponents=${[...childContainers, ...childComponents]}

@@ -6,6 +6,7 @@ import Root from './components/Root.js';
 // Typescript transformations do not alter import paths
 // https://github.com/evanw/esbuild/issues/622 
 
+
 function App() {
 
     const queryString = window.location.search;
