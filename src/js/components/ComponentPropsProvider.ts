@@ -1,11 +1,6 @@
-import { useContext, useState } from '../lib/react/react-internal.js';
 import { html } from '../utils/markup.js';
-import { Component, componentStore, Dispatch as DispatchComponents, ActionType as ActionTypeComponents, ActionType } from '../context/components.js';
-import { State, stateStore, Dispatch as DispatchState, ActionType as ActionTypeState } from '../context/state.js';
-import { invoke } from "../utils/network.js";
+import { Component, Outcome } from '../types/interfaces.js';
 import { InvokeType } from '../constants.js';
-import { Outcome } from '../context/components.js';
-
 interface InvokeOutcome {
     ({ outcomeId, invokeType }?: { outcomeId?: string, invokeType?: InvokeType }): Promise<{any}>
 }
@@ -20,22 +15,94 @@ export interface ComponentProps {
     invokeOutcome: InvokeOutcome,
 };
 
-const ComponentPropsProvider = ({ componentData: initialComponentData, Component, applicationData }) => {
+const flattenContainers = (containers, parentId = null, collection = []) => {
 
-    const [componentData, setComponent] = useState(initialComponentData);
+    return containers.reduce((accumulation, container) => {
+
+        container.parentId = parentId;
+        
+        const appendedAccumulation = [
+            ...accumulation,
+            container,
+        ];
+        
+        return flattenContainers(container.pageContainerResponses ?? [], container.id, appendedAccumulation);
+
+    }, collection);
+};
+
+
+const ComponentPropsProvider = ({ componentId, Component, applicationData, updateApplicationData, invoke }) => {
+
+    const pageResponse = applicationData?.mapElementInvokeResponses[0]?.pageResponse ?? null;
+
+    const containerMetas = pageResponse?.pageContainerResponses ?? [];
+
+    const flattenedContainerMetas = flattenContainers(containerMetas);
+    const componentMetas = pageResponse?.pageComponentResponses ?? [];
+
+    const components = componentMetas.map((componentMeta) => {
+        const componentData = pageResponse.pageComponentDataResponses.find((c => c.pageComponentId === componentMeta.id));
+        return {
+            ...componentMeta,
+            ...componentData,
+        };
+    });
+    const containers = flattenedContainerMetas.map((containerMeta) => {
+        const containerData = pageResponse.pageContainerDataResponses.find((c => c.pageContainerId === containerMeta.id));
+        return {
+            ...containerMeta,
+            ...containerData,
+        };
+    });
+    const outcomes = applicationData?.mapElementInvokeResponses[0]?.outcomeResponses ?? [];
+
+    const componentData = [...containers, ...components, ...outcomes].find(component => component.id === componentId);
+
+    const childComponents = components.filter((component => component.pageContainerId === componentId));
+
+    const childContainers = containers.filter(container => container.parentId === componentId);
 
     const updateComponent = (updatedComponentData) => {
 
-        // TODO: Keep record of updated component data
-        
-        setComponent({
-            ...componentData,
-            ...updatedComponentData,
+        const componentData = applicationData.mapElementInvokeResponses[0].pageResponse.pageComponentDataResponses.find(
+            componentData => componentData.pageComponentId === componentId
+        );
+
+        const assignableComponentDataProperties = [
+            'content',
+            'contentValue',
+            'fileDataRequest',
+            'imageUri',
+            'isEditable',
+            'isEnabled',
+            'isRequired',
+            'isValid',
+            'isVisible',
+            'objectData',
+            'objectDataRequest',
+            'tags',
+            'validationMessage',
+        ];
+
+        Object.entries(updatedComponentData).forEach(([key, val]) => {
+            if (assignableComponentDataProperties.includes(key)) {
+                componentData[key] = val;
+            }
         });
+
+        updateApplicationData(applicationData);
     };
 
     return html`
-        <${Component} componentData=${componentData} updateComponent=${updateComponent} applicationData=${applicationData} />
+        <${Component} 
+            componentData=${componentData} 
+            updateComponent=${updateComponent} 
+            applicationData=${applicationData} 
+            updateApplicationData=${updateApplicationData} 
+            childComponents=${[...childContainers, ...childComponents]}
+            invoke=${invoke}
+        />
     `;
 };
 

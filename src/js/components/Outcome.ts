@@ -2,7 +2,7 @@ import { html } from '../utils/markup.js';
 import { useState } from '../lib/react/react-internal.js';
 import { ComponentProps } from "./ComponentPropsProvider.js";
 
-const Outcome = ({ componentData: outcome, invokeOutcome }: ComponentProps) => {
+const Outcome = ({ componentData: outcome, invoke }: ComponentProps) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -12,7 +12,9 @@ const Outcome = ({ componentData: outcome, invokeOutcome }: ComponentProps) => {
 
         setIsLoading(true);
 
-        await invokeOutcome();
+        await invoke({
+            outcomeId: outcome.id,
+        });
 
         setIsLoading(false);
     };

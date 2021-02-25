@@ -1,24 +1,21 @@
-import { useContext } from '../lib/react/react-internal.js';
-import { componentStore, Layout } from '../context/components.js';
 import { html } from '../utils/markup.js';
 import ComponentLoader from './ComponentLoader.js';
 
-function Container ({ componentData, appplicationData }) {
+function Container ({ componentData, updateApplicationData, applicationData, childComponents }) {
 
-    // const components: Layout[] = useContext(componentStore).components;
-
-    // children can be containers or compnents
-    const children = [
-        ...componentData.containers,
-        ...componentData.components,
-    ];
-
-    children.sort((a, b) => a.order - b.order);
+    childComponents.sort((a, b) => a.order - b.order);
 
     return html`
         <div className="container">
         ${
-            children.map(child => html`<${ComponentLoader} componentData=${child} appplicationData=${appplicationData} /}>`)
+            childComponents.map(child => html`
+                <${ComponentLoader} 
+                    componentId=${child.id} 
+                    componentType=${child.componentType || child.containerType}
+                    applicationData=${applicationData}
+                    updateApplicationData=${updateApplicationData} 
+                />
+            `)
         }
         </div>
     `;

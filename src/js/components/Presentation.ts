@@ -5,6 +5,8 @@ function createMarkup(str) {
 }
 
 function Presentation ({ componentData }) {
+    
+    console.log(`Render Presentation: ${componentData.content}`)
 
     // TODO: Don't use dangerouslySetInnerHTML
 

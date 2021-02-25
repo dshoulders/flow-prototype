@@ -75,8 +75,8 @@ export async function invoke({
         components,
         invokeType,
 }) {
-    const pageComponentInputResponses = components.map(({ id, contentValue, objectData }) => ({
-        pageComponentId: id,
+    const pageComponentInputResponses = components.map(({ pageComponentId, contentValue, objectData }) => ({
+        pageComponentId,
         contentValue,
         objectData, 
     }));
