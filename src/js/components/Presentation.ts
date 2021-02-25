@@ -4,12 +4,12 @@ function createMarkup(str) {
     return {__html: str};
 }
 
-function Presentation ({ component }) {
+function Presentation ({ componentData }) {
 
     // TODO: Don't use dangerouslySetInnerHTML
 
     return html`
-        <div dangerouslySetInnerHTML=${createMarkup(component.content)} />
+        <div dangerouslySetInnerHTML=${createMarkup(componentData.content)} />
     `;
 }
 

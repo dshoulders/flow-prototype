@@ -1,7 +1,5 @@
 import { render } from './lib/react-dom/react-dom-internal.js';
 import { html } from './utils/markup.js';
-import { StateProvider } from './context/state.js';
-import { ComponentProvider } from './context/components.js';
 import Root from './components/Root.js';
 
 // Import statements should all use .js extension so that they are correct when transpiled
@@ -17,11 +15,7 @@ function App() {
     const flowVersionId = urlParams.get('flow-version-id');
 
     return html`
-        <${StateProvider}>
-            <${ComponentProvider}>
-                <${Root} flowId=${flowId} flowVersionId=${flowVersionId}/>
-            </${ComponentProvider}>
-        </${StateProvider}>
+        <${Root} flowId=${flowId} flowVersionId=${flowVersionId}/>
     `;
 }
 
