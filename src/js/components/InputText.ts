@@ -23,10 +23,10 @@ const InputText = ({ componentData, updateComponent }: ComponentProps) => {
 
     return html`
         <span className='form-control'>
-            <label for=${componentData.id} className='label'>
+            <label htmlFor=${componentData.id} className='label'>
                 ${componentData.label}
                 ${
-                    componentData.isRequired || true ? html`<abbr className="required" title="required" aria-label="required">*</abbr>` : null
+                    componentData.isRequired ? html`<abbr className="required" title="required" aria-label="required">*</abbr>` : null
                 }
             </label>
             <input className=${'input'} id=${componentData.id} value=${value} onChange=${onChange} onBlur=${onBlur} />
