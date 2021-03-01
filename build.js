@@ -35,7 +35,7 @@ const build = async () => {
     fl.include('src/**/*.js');
     fl.include('src/**/*.ts');
 
-    // Start build service
+    // Start ESBuild build service
     const service = await startService();
 
     try {

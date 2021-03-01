@@ -126,6 +126,22 @@ export const sync = async ({
 
 export const hubConnection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5000/collaboration").build();
 
-hubConnection.start().catch(function (err) {
-    return console.error(err.toString());
-});
+export const startServiceWorker = () => {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('../service-worker.js').then(function (registration) {
+                // Registration successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function (err) {
+                // Registration failed
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
+};
+
+export const startRealtimeConnection = () => {
+    hubConnection.start().catch(function (err) {
+        return console.error(err.toString());
+    });
+};

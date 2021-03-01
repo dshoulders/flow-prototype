@@ -3,6 +3,13 @@ import { html } from '../utils/markup.js';
 import components from '../config/components.js';
 import ComponentPropsProvider from './ComponentPropsProvider.js';
 
+/**
+ * Loads a file containing a default export of a React component.
+ * The file url is defined in the component list (config/components.js) in the format: "componentType": "file-url.js"
+ * Uses React.Suspense to show a fallback UI while a file is being loaded.
+ * Passes the lazy loaded React component to the child component, once loaded.
+ * All props passed to this component, except componentType are passed on to the child component.
+ */
 const ComponentLoader = ({ componentType, componentId, applicationData, updateApplicationData, invoke }) => {
 
     const [Component, setComponent] = useState(lazy(() => import(components[componentType.toLowerCase()])));

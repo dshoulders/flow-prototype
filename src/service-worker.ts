@@ -1,8 +1,15 @@
 const CACHE_NAME = 'flow-cache-v1';
 
-self.addEventListener('install', function (event: ExtendableEvent) {
 
-    // Perform install steps
+/**
+ * Defines the install procedure for installing on a users device.
+ * Creates/opens an application cache, downloads all files listed in file-list.json
+ * and stores them in the cache.
+ * This enables starting the application while offline.
+ */
+const onInstall = function (event) {
+
+    /** Perform install steps */
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(function (cache) {
@@ -12,18 +19,29 @@ self.addEventListener('install', function (event: ExtendableEvent) {
                 return fetch('/file-list.json').then(function (response) {
                     return response.json();
                 }).then(function (files) {
-                    files.push('/' + self.location.search); // capture html file url with query string
+                    /** capture html file url with query string */
+                    files.push('/' + self.location.search);
                     return cache.addAll(files);
                 });
             })
     );
-});
+};
 
-self.addEventListener('fetch', function (event: FetchEvent) {
+/**
+ * Listens for fetch events and controls their responses.
+ * If a request matches a request in the application cache (css, js assets etc.), return the response from the cache instead of the network.
+ * Next, try to make the request over the network and return the response.
+ * If a network error occurs, generate a custom response locally.
+ * 
+ * TODO: store the requests that fail for playback at a later time when network connectivity is resumed.
+ * 
+ * TODO: pre-fetching data from a service.
+ */
+const onFetch = function (event: any) {
     event.respondWith(
         caches.match(event.request)
             .then(function (response) {
-                // Cache hit - return response
+                /** Cache hit - return response */
                 if (response) {
                     return response;
                 }
@@ -35,8 +53,12 @@ self.addEventListener('fetch', function (event: FetchEvent) {
                 })
             })
     );
-});
+};
 
+self.addEventListener('install', onInstall);
+self.addEventListener('fetch', onFetch);
+
+// Very crude, hardcoded implementation which only handles two very specific cases
 async function customHandler(request) {
 
     if (/\/api\/run\/1\/state/.test(request.url)) {

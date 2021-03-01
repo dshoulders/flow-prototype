@@ -1,12 +1,15 @@
 import { render } from './lib/react-dom/react-dom-internal.js';
 import { html } from './utils/markup.js';
 import Root from './components/Root.js';
+import { startRealtimeConnection, startServiceWorker } from './utils/network.js';
 
-// Import statements should all use .js extension so that they are correct when transpiled
-// Typescript transformations do not alter import paths
-// https://github.com/evanw/esbuild/issues/622 
+/**
+ * Import statements should all use .js extension so that they are correct when transpiled
+ * Typescript transformations do not alter import paths
+ * https://github.com/evanw/esbuild/issues/622
+ */
 
-
+/** The entry component */
 function App() {
 
     const queryString = window.location.search;
@@ -20,16 +23,11 @@ function App() {
     `;
 }
 
+/**
+ * Render the App component into the #app HTML element
+ * TODO: Need to be able to define the element to render into
+ */
 render(html`<${App}/>`, document.getElementById('app'));
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-        navigator.serviceWorker.register('../service-worker.js').then(function (registration) {
-            // Registration successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function (err) {
-            // Registration failed
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-}
+startServiceWorker();
+startRealtimeConnection();

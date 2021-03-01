@@ -4,6 +4,13 @@ import { html } from '../utils/markup.js';
 import { hubConnection, initialize, invoke } from '../utils/network.js';
 import ComponentLoader from "./ComponentLoader.js";
 
+/**
+ * Renders the root of the page component tree.
+ * Handles calls to update application state.
+ * Has a single React state containing the entire application state.
+ * Passes an update function down through the component tree for mutating the apllication state.
+ * Handles calls to invoke by passing an invoke function to child components
+ */
 function Root ({ flowId, flowVersionId }) {
 
     const [appState, setAppState] = useState(null);
@@ -12,7 +19,7 @@ function Root ({ flowId, flowVersionId }) {
 
         (async () => {
 
-            // Initializes and invokes a forward from start to first map element
+            /** Initializes and invokes a forward from start to first map element */
             const invokeResponse = await initialize(flowId, flowVersionId);
 
             setAppState(invokeResponse);
@@ -25,8 +32,10 @@ function Root ({ flowId, flowVersionId }) {
         // Subscribe to collaborator invoke
 
         const receiveInvoke = (outcomeId) => {
-            // A collaborator has invoked this outcome
-            // We need to do the same 
+            /**
+             * A collaborator has invoked this outcome
+             * We need to do the same
+             */
             invokeHandler({ outcomeId });
         }
 
@@ -37,7 +46,7 @@ function Root ({ flowId, flowVersionId }) {
 
     const invokeHandler = async ({ outcomeId, invokeType = InvokeType.forward }) => {
 
-        // Make an invoke request to the engine
+        /** Make an invoke request to the engine */
         const invokeResponse = await invoke({
             stateId: appState.stateId,
             stateToken: appState.stateToken,
@@ -47,7 +56,7 @@ function Root ({ flowId, flowVersionId }) {
             invokeType,
         });
 
-        // Store the response as the application state
+        /** Store the response as the application state */
         setAppState(invokeResponse);
         
         return invokeResponse;
@@ -55,10 +64,10 @@ function Root ({ flowId, flowVersionId }) {
 
     const onInvoke = async ({ outcomeId, invokeType = InvokeType.forward }) => {
 
-        // Make invoke request and process the reponse
+        /** Make invoke request and process the reponse */
         const invokeResponse = await invokeHandler({ outcomeId, invokeType });
 
-        // Inform collaborators that we have invoked the outcome
+        /** Inform collaborators that we have invoked the outcome */
         hubConnection.invoke('SendInvoke', outcomeId).catch(function (err) {
             return console.error(err.toString());
         });
@@ -69,7 +78,7 @@ function Root ({ flowId, flowVersionId }) {
     const pageResponse = appState?.mapElementInvokeResponses[0]?.pageResponse ?? null;
     const mainContainer = pageResponse?.pageContainerResponses[0] ?? null;
     const pageOutcomes = appState?.mapElementInvokeResponses[0]?.outcomeResponses?.map(
-        // Add missing component type
+        /** Add missing component type */
         outcomeResponse => ({
             ...outcomeResponse, 
             componentType: 'outcome',
@@ -86,6 +95,9 @@ function Root ({ flowId, flowVersionId }) {
     };
 
     console.log(`Render Root`)
+
+    // TODO: Render an optional logo/header
+    // TODO: Render navigation elements
 
     return html`
         <div className="flow">

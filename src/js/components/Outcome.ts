@@ -1,7 +1,8 @@
 import { html } from '../utils/markup.js';
 import { useState } from '../lib/react/react-internal.js';
-import { ComponentProps } from "./ComponentPropsProvider.js";
+import { ComponentProps } from "../types/interfaces.js";
 
+/** Default Flow outcome component */
 const Outcome = ({ componentData, invoke }: ComponentProps) => {
 
     const [isLoading, setIsLoading] = useState(false);

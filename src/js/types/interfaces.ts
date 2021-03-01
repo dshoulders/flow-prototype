@@ -72,5 +72,5 @@ export interface ComponentProps {
     updateComponent: UpdateComponent,
     applicationData: any, 
     updateApplicationData: UpdateComponent,
-    invokeOutcome: InvokeOutcome,
+    invoke: InvokeOutcome,
 };

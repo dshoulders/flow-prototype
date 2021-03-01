@@ -1,6 +1,7 @@
 import { html } from '../utils/markup.js';
 import ComponentLoader from './ComponentLoader.js';
 
+/** Default Flow container component */
 function Container ({ componentData, updateApplicationData, applicationData, childComponents }) {
 
     childComponents.sort((a, b) => a.order - b.order);

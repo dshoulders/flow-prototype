@@ -5,6 +5,7 @@ function createMarkup(str) {
     return {__html: str};
 }
 
+/** Default Flow presentation component */
 function Presentation ({ componentData }: ComponentProps) {
     
     console.log(`Render Presentation: ${componentData.content}`)
