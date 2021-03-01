@@ -25,6 +25,16 @@ export interface InvokeRequest {
     currentMapElementId: string,
 }
 
+/**
+ * Service worker connection client
+ */
+export let hubConnection = null;  
+
+/**
+* A wrapper around the native fetch that adds consistent headers
+* and parses the reponse into a JSON object before returning it.
+* Network errors will be caught by the service worker. 
+*/
 export async function postData(url = '', data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
@@ -44,6 +54,10 @@ export async function postData(url = '', data = {}) {
     return response.json(); // parses JSON response into native JavaScript objects
 };
 
+/**
+* Sends an initialize request, then sends an invoke request 
+* to move from the start map element to the first map element of the flow
+*/
 export async function initialize(flowId, flowVersionId) {
 
     const initailizeRequest: InitailizeRequest = {
@@ -68,6 +82,11 @@ export async function initialize(flowId, flowVersionId) {
     return invokeResponse;
 }
 
+/**
+* Sends an invoke request.
+* Any components that have changed their bound value need to be suppied.
+* If the invokeType is a 'FORWARD' the engine will invoke the selectedOutcomeId to progress forward.
+*/
 export async function invoke({
         stateId,
         stateToken,
@@ -103,6 +122,10 @@ export async function invoke({
     return response;
 }
 
+/**
+ * Sends an invoke request.
+ * Any components that have changed their bound value need to be suppied.
+ */
 export const sync = async ({
     stateId,
     stateToken,
@@ -124,23 +147,28 @@ export const sync = async ({
     return response;
 }
 
-export const hubConnection = new signalR.HubConnectionBuilder().withUrl("http://localhost:5000/collaboration").build();
-
+/**
+ * Registers the service worker.
+ * */
 export const startServiceWorker = () => {
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-            navigator.serviceWorker.register('../service-worker.js').then(function (registration) {
-                // Registration successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function (err) {
-                // Registration failed
-                console.log('ServiceWorker registration failed: ', err);
-            });
+        navigator.serviceWorker.register('../service-worker.js').then(function (registration) {
+            // Registration successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+            // Registration failed
+            console.log('ServiceWorker registration failed: ', err);
         });
     }
 };
 
-export const startRealtimeConnection = () => {
+/**
+ * Starts a signalR connection with the supplied url
+ * */
+export const startRealtimeConnection = (url) => {
+
+    hubConnection = new signalR.HubConnectionBuilder().withUrl(url).build();
+
     hubConnection.start().catch(function (err) {
         return console.error(err.toString());
     });

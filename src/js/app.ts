@@ -30,4 +30,4 @@ function App() {
 render(html`<${App}/>`, document.getElementById('app'));
 
 startServiceWorker();
-startRealtimeConnection();
+startRealtimeConnection("http://localhost:5000/collaboration");
